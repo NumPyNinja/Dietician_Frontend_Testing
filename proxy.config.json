@@ -3,7 +3,7 @@
       
     "target":"https://dieticianstaging-f334e4b782aa.herokuapp.com/dietician",
     "pathRewrite": {
-    "^/api": ""
+    "^/api": " "
     },
     "changeOrigin": true
     }
