@@ -3,6 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../UserService/user.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { Patient } from '../readpatients/patient';
+import { UtilityService } from '../shared/utility.service';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 interface Allergy {
   value: string;
@@ -28,8 +31,10 @@ export class DialogComponent implements OnInit {
   isUpdate: boolean = false;
   maxDate: any;
   selectedAllergies: string;
-  numRegex = /^-?\d*[.,]?\d{0,1}$/;
-  allergies: Allergy[] = [{ value: 'egg-0', viewValue: 'Egg' },
+  numRegex = /^(?![a-zA-Z])\d*[.,]?\d{0,1}$/;
+     
+  allergies: Allergy[] = [{ value: 'none', viewValue: 'None' },
+    { value: 'egg-0', viewValue: 'Egg' },
   { value: 'milk-1', viewValue: 'Milk' },
   { value: 'soy-2', viewValue: 'Soy' },
   { value: 'almond-3', viewValue: 'Almond' },
@@ -52,6 +57,7 @@ export class DialogComponent implements OnInit {
   uploadedFileNames: string[] = [];
 
   constructor(private fb: FormBuilder, private userService: UserService, private dialogRef: MatDialogRef<DialogComponent>,
+    private utilityService: UtilityService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.isUpdate = false;
@@ -60,18 +66,18 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.patientForm = this.fb.group({
-      FirstName: ['', Validators.required],
-      LastName: ['', Validators.required],
-      Email: ['', Validators.required],
-      ContactNumber: ['', Validators.required],
+      FirstName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      LastName: ['',  [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      Email: ['', [Validators.required, Validators.email]],
+      ContactNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       Allergy: [''],
       FoodCategory: [''],
       DateOfBirth: ['', Validators.required],
-      Weight: ['', Validators.pattern(this.numRegex)],
-      Height: ['', Validators.pattern(this.numRegex)],
-      Temperature: ['', Validators.pattern(this.numRegex)],
-      SP: [''],
-      DP: ['']
+      Weight: ['', [Validators.min(0), Validators.max(250), Validators.pattern(this.numRegex)]],
+      Height: ['', Validators.pattern(/^(?!-)([0-6]?\d(\.\d{1,2})?|7[0-9](\.\d{1,2})?|84)$/)],
+      Temperature: ['', Validators.pattern(/^(9[5-9]|[1][0-9][0-7])(\.\d)?$/)],
+      SP: ['', [Validators.pattern(/^\d{2,3}$/)]],
+      DP: ['', Validators.pattern(/^\d{2,3}$/)]
     });
 
     if (this.data && this.data.isUpdate) {
@@ -140,17 +146,17 @@ export class DialogComponent implements OnInit {
             this.patientForm.reset();
             this.dialogRef.close('Patient details saved.');
           },
-          error: () => {
-            alert('Error adding patient details.');
+          error: (err: HttpErrorResponse) => {
+            const errorMessage = this.utilityService.getServerErrorMessage(err);
+            alert(errorMessage); // Display error message to the user
           }
-        });
+         });
       }
     } else {
       this.validateFormData(this.patientForm);
     }
   }
-
-
+ 
   removeVitalsWhenNotPresent() {
     const formControls = ["Weight", "Height", "Temperature", "SP", "DP"];
     let control, controlValue;
@@ -172,7 +178,6 @@ export class DialogComponent implements OnInit {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         this.userFiles.push(file);
-        this.uploadedFileNames.push(file.name);
       }
     }
   }

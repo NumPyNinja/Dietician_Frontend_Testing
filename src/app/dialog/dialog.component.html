@@ -11,10 +11,18 @@
           <td><mat-form-field class="example-full-width" appearance="fill">
               <mat-label>First name</mat-label>
               <input formControlName="FirstName" matInput>
+              <mat-error *ngIf="patientForm.controls['FirstName'].hasError('required')">First name is
+                <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="patientForm.controls['FirstName'].hasError('pattern')">Invalid characters. Only letters and spaces are allowed.</mat-error>
             </mat-form-field></td>
           <td><mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Last name</mat-label>
               <input formControlName="LastName" matInput>
+              <mat-error *ngIf="patientForm.controls['LastName'].hasError('required')">Last name is
+                <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="patientForm.controls['LastName'].hasError('pattern')">Invalid characters. Only letters and spaces are allowed.</mat-error>
             </mat-form-field></td>
         </tr>
       </div>
@@ -24,15 +32,20 @@
       <tr>
       <tr>
         <div>
-          <td><mat-form-field class="custom-300px" appearance="fill">
+          <td><mat-form-field class="custom-300px" appearance="fill" >
               <mat-label>Email</mat-label>
-              <input formControlName="Email" matInput placeholder="pat@example.com">
-
+              <input matInput type="email" formControlName="Email" matInput placeholder="pat@example.com">
+              <mat-error *ngIf="patientForm.get('Email')?.hasError('required')">Email address is <strong>required</strong></mat-error>
+              <mat-error *ngIf="patientForm.get('Email')?.hasError('email')">Please enter a valid email address</mat-error>
             </mat-form-field></td>
           <td><mat-form-field class="custom-150px" appearance="fill">
               <mat-label>Contact Number</mat-label>
               <input formControlName="ContactNumber" matInput #contactNumber maxlength="10"
                 placeholder="Ex. 9999999999">
+                <mat-error *ngIf="patientForm.controls['ContactNumber'].hasError('required')">Phone number is
+                  <strong>required</strong>
+                </mat-error>
+                 <mat-error *ngIf="patientForm.controls['ContactNumber'].hasError('pattern')">Invalid phone number format (10 digits required)</mat-error>
               <mat-hint align="end"></mat-hint>
             </mat-form-field></td>
         </div>
@@ -41,19 +54,21 @@
         <div>
           <td><mat-form-field class="custom-300px">
               <mat-label>Allergies</mat-label>
-              <mat-select [(ngModel)]="selectedAllergies" [ngModelOptions]="{standalone: true}" name="Allergy">
+              <mat-select [(ngModel)]="selectedAllergies" [ngModelOptions]="{standalone: true}" name="Allergy" required>
                 <mat-option *ngFor="let allergy of allergies" [value]="allergy.viewValue">
                   {{allergy.viewValue}}
                 </mat-option>
               </mat-select>
+               <mat-error *ngIf="!selectedAllergies">Allergy is required.</mat-error>
             </mat-form-field></td>
           <td><mat-form-field class="custom-150px">
               <mat-label>Food Categories</mat-label>
-              <mat-select [(ngModel)]="selectedFood" [ngModelOptions]="{standalone: true}" name="Food">
+              <mat-select [(ngModel)]="selectedFood" [ngModelOptions]="{standalone: true}" name="Food" required>
                 <mat-option *ngFor="let food of foods" [value]="food.viewVal">
                   {{food.viewVal}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="!selectedFood">Food Categories is required.</mat-error>
             </mat-form-field></td>
         </div>
       <tr>
@@ -74,18 +89,22 @@
           <mat-form-field class="custom-90px" appearance="fill">
             <mat-label>Weight</mat-label>
             <input formControlName="Weight" matInput placeholder="Kgs Ex:60.5">
-          </mat-form-field>
+            <mat-error *ngIf="patientForm.get('Weight')?.hasError('pattern')">Weight should be  <strong>numeric and positive </strong></mat-error>
+            <mat-error *ngIf="patientForm.get('Weight')?.hasError('max')">Weight cannot be greater than 250</mat-error>
+            </mat-form-field>
         </td>
         <td>
           <mat-form-field class="custom-90px" appearance="fill">
             <mat-label>Height</mat-label>
             <input formControlName="Height" matInput placeholder="Inches Ex:65.3">
+            <mat-error *ngIf="patientForm.get('Height')?.hasError('pattern')">Height should be <strong>numeric,positive and less that 7ft </strong></mat-error>
           </mat-form-field>
         </td>
         <td>
           <mat-form-field class="custom-105px" appearance="fill">
             <mat-label>Temperature</mat-label>
             <input formControlName="Temperature" placeholder="Farenheit" matInput>
+            <mat-error *ngIf="patientForm.get('Temperature')?.hasError('pattern')">Temperature should be <strong>numeric,positive and range between 95-107 </strong></mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -96,11 +115,13 @@
           <mat-form-field class="custom-90px" appearance="fill">
             <mat-label>SP</mat-label>
             <input formControlName="SP" placeholder="Systolic Pressure" matInput>
+            <mat-error *ngIf="patientForm.get('SP')?.hasError('pattern')">Systolic pressure should be <strong>numeric and positive</strong></mat-error>
           </mat-form-field>
         </td>
         <td> <mat-form-field class="custom-90px" appearance="fill">
             <mat-label>DP</mat-label>
             <input formControlName="DP" placeholder="Diastolic Pressure" matInput>
+            <mat-error *ngIf="patientForm.get('DP')?.hasError('pattern')">Diastolic pressure should be <strong>numeric and positive </strong></mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -113,7 +134,6 @@
 <tr>
   <td>
     <mat-label for="file">Upload Health Report: </mat-label>
-    <mat-label for="file">Upload Health Report: </mat-label>
     <div *ngIf="uploadedFileNames.length > 0">
       <ul>
         <li *ngFor="let fileName of uploadedFileNames">{{ fileName }}</li>
@@ -124,7 +144,7 @@
 </tr>
 <br>
 <br>
-<button mat-raised-button color="primary" (click)="addPatient(patientForm)"> Submit</button>
+<button mat-raised-button color="primary" (click)="addPatient(patientForm)" [disabled]="!patientForm.valid"> Submit</button>
 
 
 <button style="margin-left:10px;" mat-raised-button color="warn" mat-dialog-close>Close</button>
