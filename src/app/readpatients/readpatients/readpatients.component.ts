@@ -63,7 +63,7 @@ export class ReadpatientsComponent implements OnInit {
       }
       if (value instanceof Date || Date.parse(value)) {
         // @ts-ignore
-        let formattedDate = this.datePipe.transform(value, 'MM/dd/yyyy')
+        let formattedDate = this.datePipe.transform(value, 'dd-MM-yyyy')
         // @ts-ignore
         return formattedDate.toString().includes(filter.toString());
       } else {
