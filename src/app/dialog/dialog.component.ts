@@ -106,7 +106,9 @@ export class DialogComponent implements OnInit {
       const formData = { ...this.patientForm.value };
       formData.Allergy = this.selectedAllergies;
       formData.FoodCategory = this.selectedFood;
-
+      const dateOfBirth = new Date(formData.DateOfBirth);
+      const formattedDateOfBirth = dateOfBirth.toISOString().split('T')[0];
+      formData.DateOfBirth = formattedDateOfBirth;
       const formDataToSubmit = new FormData();
       formDataToSubmit.append('patientInfo', JSON.stringify(formData));
       for (let i = 0; i < this.userFiles.length; i++) {
