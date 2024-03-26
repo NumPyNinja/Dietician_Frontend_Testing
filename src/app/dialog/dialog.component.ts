@@ -38,20 +38,19 @@ export class DialogComponent implements OnInit {
   { value: 'milk-1', viewValue: 'Milk' },
   { value: 'soy-2', viewValue: 'Soy' },
   { value: 'almond-3', viewValue: 'Almond' },
-  { value: 'peanut-4', viewValue: 'Peanuts' },
+  { value: 'peanut-4', viewValue: 'Peanut' },
   { value: 'walnut-5', viewValue: 'Walnut' },
   { value: 'pistachio-6', viewValue: 'Pistachio' },
   { value: 'sesame-7', viewValue: 'Sesame' },
   { value: 'hazelnut-8', viewValue: 'Hazelnut' },
-  { value: 'pistachio-9', viewValue: 'Pistachio' },
   { value: 'pecan-10', viewValue: 'Pecan' },
   { value: 'cashew-11', viewValue: 'Cashew' }]
   selectedFood: string;
   foods: Food[] = [{ val: 'vegan-0', viewVal: 'Vegan' },
   { val: 'vegetarian-1', viewVal: 'Vegetarian' },
   { val: 'jain-2', viewVal: 'Jain' },
-  { val: 'eggitarian-3', viewVal: 'Eggitarian' },
-  { val: 'nonveg-4', viewVal: 'Non-Veg' },
+  { val: 'eggetarian-3', viewVal: 'Eggetarian' },
+  { val: 'nonveg-4', viewVal: 'NonVeg' },
   ]
   userFiles: File[] = [];
   uploadedFileNames: string[] = [];
