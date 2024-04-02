@@ -59,13 +59,14 @@
                             <td> {{testreport.fileName}} </td>
 
                             <td>
-                        <tr *ngFor="let entry of testreport.vitals | keyvalue: asIsOrder">
-                            <td> {{ entry.key}} </td>
-                            <td> {{ entry.value}} </td>
-                        </tr>
-
-                        </td>
-                        <td>{{testreport.morbidConditionStr}}</td>
+                       <ng-container *ngFor="let entry of testreport.vitals | keyvalue: asIsOrder">
+                                    <div>{{ entry.key }}: {{ entry.value }}</div>
+                                </ng-container></td>
+                                 <td>
+                                    <ng-container *ngFor="let condition of testreport.morbidConditionStr.split('\n')">
+                                        <div>{{ condition }}</div>
+                                    </ng-container> 
+                                 </td>
 
                         </tr>
                     </ng-template>
