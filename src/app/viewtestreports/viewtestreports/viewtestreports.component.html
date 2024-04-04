@@ -60,11 +60,11 @@
 
                             <td>
                        <ng-container *ngFor="let entry of testreport.vitals | keyvalue: asIsOrder">
-                                    <div>{{ entry.key }}: {{ entry.value }}</div>
+                                    <div>{{ entry.key }}:{{ entry.value }}</div>
                                 </ng-container></td>
                                  <td>
                                     <ng-container *ngFor="let condition of testreport.morbidConditionStr.split('\n')">
-                                        <div>{{ condition }}</div>
+                                        <div style="width: max-content;">{{condition}}</div>
                                     </ng-container> 
                                  </td>
 
