@@ -1,10 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../UserService/user.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { Patient } from '../readpatients/patient';
 import { UtilityService } from '../shared/utility.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 
 interface Allergy {
@@ -14,6 +14,10 @@ interface Allergy {
 interface Food {
   val: string;
   viewVal: string;
+}
+interface Cuisine {
+  value: string;
+  viewValue: string;
 }
 
 @Component({
@@ -31,6 +35,7 @@ export class DialogComponent implements OnInit {
   isUpdate: boolean = false;
   maxDate: any;
   selectedAllergies: string;
+  selectedCuisines: String;
   numRegex = /^(?![a-zA-Z])\d*[.,]?\d{0,1}$/;
      
   allergies: Allergy[] = [{ value: 'none', viewValue: 'None' },
@@ -43,6 +48,7 @@ export class DialogComponent implements OnInit {
   { value: 'pistachio-6', viewValue: 'Pistachio' },
   { value: 'sesame-7', viewValue: 'Sesame' },
   { value: 'hazelnut-8', viewValue: 'Hazelnut' },
+ // { value: 'pistachio-9', viewValue: 'Pistachio' },
   { value: 'pecan-10', viewValue: 'Pecan' },
   { value: 'cashew-11', viewValue: 'Cashew' }]
   selectedFood: string;
@@ -51,6 +57,39 @@ export class DialogComponent implements OnInit {
   { val: 'jain-2', viewVal: 'Jain' },
   { val: 'eggetarian-3', viewVal: 'Eggetarian' },
   { val: 'nonveg-4', viewVal: 'NonVeg' },
+  ]
+  Cuisines: Cuisine[] = [{ value: 'Indian-0', viewValue: 'Indian' },
+  { value: 'South Indian-1', viewValue: 'South Indian' },
+  { value: 'Rajasthani-2', viewValue: 'Rajasthani' },
+  { value: 'Punjabi-3', viewValue: 'Punjabi' },
+  { value: 'Bengali-4', viewValue: 'Bengali' },
+  { value: 'Orissa-5', viewValue: 'Orissa' },
+  { value: 'Gujarati-6', viewValue: 'Gujarati' },
+  { value: 'Andhra-7', viewValue: 'Andhra' },
+  { value: 'Kerala-8', viewValue: 'Kerala' },
+  { value: 'Himachali-9', viewValue: 'Himachali' },
+  { value: 'Tamil Nadu-10', viewValue: 'Tamil Nadu' },
+  { value: 'Madhya Pradesh-11', viewValue: 'Madhya Pradesh' },
+  { value: 'Assamese-12', viewValue: 'Assamese' },
+  { value: 'Manipuri-13', viewValue: 'Manipuri' },
+  { value: 'Tripuri-14', viewValue: 'Tripuri' },
+  { value: 'Sikkimese-15', viewValue: 'Sikkimese' },
+  { value: 'Mizo-16', viewValue: 'Mizo' },
+  { value: 'Arunachali-17', viewValue: 'Arunachali' },
+  { value: 'Uttarakhand-18', viewValue: 'Uttarakhand' },
+  { value: 'Haryanvi-19', viewValue: 'Haryanvi' },
+  { value: 'Awadhi-20', viewValue: 'Awadhi' },
+  { value: 'Bihari-21', viewValue: 'Bihari' },
+  { value: 'Uttar Pradesh-22', viewValue: 'Uttar Pradesh' },
+  { value: 'Delhi-23', viewValue: 'Delhi' },
+  { value: 'North Indian-24', viewValue: 'North Indian' },
+  { value: 'Italian-25', viewValue: 'Italian' },
+  { value: 'French-26', viewValue: 'French' },
+  { value: 'Arabic-27', viewValue: 'Arabic' },
+  { value: 'Lebanese-28', viewValue: 'Lebanese' },
+  { value: 'Thai-29', viewValue: 'Thai' },
+  { value: 'Mexican-30', viewValue: 'Mexican' },
+  { value: 'American-31', viewValue: 'American' },
   ]
   userFiles: File[] = [];
   uploadedFileNames: string[] = [];
@@ -70,7 +109,8 @@ export class DialogComponent implements OnInit {
       Email: ['', [Validators.required, Validators.email]],
       ContactNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       Allergy: [''],
-      FoodCategory: [''],
+      FoodPreference:[''],
+      CuisineCategory:[''],
       DateOfBirth: ['', Validators.required],
       Weight: ['', [Validators.min(0), Validators.max(250), Validators.pattern(this.numRegex)]],
       Height: ['', Validators.pattern(/^(?!-)([0-6]?\d(\.\d{1,2})?|7[0-9](\.\d{1,2})?|84)$/)],
@@ -84,7 +124,8 @@ export class DialogComponent implements OnInit {
       this.patientId = this.data.patientId;
       const patientData = this.data.patient;
       this.selectedAllergies = patientData.Allergy;
-      this.selectedFood = patientData.FoodCategory;
+      this.selectedFood = patientData.FoodPreference;
+      this.selectedCuisines = patientData.CuisineCategory;
       this.patientForm.patchValue(patientData)
       this.dialogTitle = 'Update Patient Details';
     }
@@ -107,10 +148,10 @@ export class DialogComponent implements OnInit {
 
   addPatient(patientForm: FormGroup) {
     if (this.patientForm.valid) {
-
       const formData = { ...this.patientForm.value };
       formData.Allergy = this.selectedAllergies;
-      formData.FoodCategory = this.selectedFood;
+      formData.FoodPreference = this.selectedFood;
+      formData.CuisineCategory = this.selectedCuisines;
       const dateOfBirth = new Date(formData.DateOfBirth);
       const formattedDateOfBirth = dateOfBirth.toISOString().split('T')[0];
       formData.DateOfBirth = formattedDateOfBirth;
