@@ -62,15 +62,29 @@
                <mat-error *ngIf="!selectedAllergies">Allergy is required.</mat-error>
             </mat-form-field></td>
           <td><mat-form-field class="custom-150px">
-              <mat-label>Food Categories</mat-label>
+              <mat-label>Food Preference</mat-label>
               <mat-select [(ngModel)]="selectedFood" [ngModelOptions]="{standalone: true}" name="Food" required>
                 <mat-option *ngFor="let food of foods" [value]="food.viewVal">
                   {{food.viewVal}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="!selectedFood">Food Categories is required.</mat-error>
+              <mat-error *ngIf="!selectedFood"> Food Preference is required.</mat-error>
             </mat-form-field></td>
         </div>
+        <tr>
+          <div>
+          <td><mat-form-field class="custom-150px">
+            <mat-label>Cuisine Category</mat-label>
+            <mat-select [(ngModel)]="selectedCuisines" [ngModelOptions]="{standalone: true}" name="Cuisine" required>
+              <mat-option *ngFor="let Cuisine of Cuisines" [value]="Cuisine.viewValue">
+                {{Cuisine.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!selectedCuisines">Cuisine Categories is required.</mat-error>
+          </mat-form-field></td>
+        </div>
+        </tr>
+      
       <tr>
         <div class="date-and-vitals-container">
           <td>
