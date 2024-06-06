@@ -6,7 +6,8 @@ export class Patient {
     ContactNumber?:number;
     Email?:String;
     Allergy?:String;
-    FoodCategory?:String;
+    FoodPreference?:String;
+    CuisineCategory?:String;
     DateOfBirth?:Date;
     LastVisitDate?: Date;
 }
